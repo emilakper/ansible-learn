@@ -15,6 +15,7 @@
           update-cache: yes
       register: error
     become: true
+    when:  ansible_facts['distribution'] == 'Ubuntu'
     rescue:
       - name:  Reboot
         debug:

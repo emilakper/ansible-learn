@@ -2,8 +2,20 @@
 - name: user
   hosts: demo
   tasks: 
-  - name: Create user
-    user:
-      name: "{{ user }}"
-      state: present
+  - name: Preconfig block
+    block:
+      - name: Create user
+        user:
+          name: "{{ user }}"
+          state: present
+        register: error
+      - name: Install curl
+        apt:
+          name: curl
+          update-cache: yes
+      register: error
     become: true
+    rescue:
+      - name:  Reboot
+        debug:
+          msg: "System is rebooting(not really)"
